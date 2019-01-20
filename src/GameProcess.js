@@ -49,7 +49,7 @@ class GameProcess extends Component {
     event.preventDefault();
     console.log('Run submitted: ', this.state.currentRun);
 
-    const newGameTree = StartGameSimulation(
+    const [newGameTree, boardState] = StartGameSimulation(
       this.state.gameTree,
       this.state.currentRun,
       this.state.startingPlayer,

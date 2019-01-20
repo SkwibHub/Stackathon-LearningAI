@@ -3,11 +3,11 @@ import checkTerminalCondition from './checkTerminalCondition';
 import selectNewNode from './selectNewNode';
 
 const RunGameSimulation = (gameTree, gameNode, gamePolicy, level, player) => {
-  console.log('NOW RUNNING: ', gameTree);
+  console.log('NOW RUNNING NEW GAME: ', gameTree);
   console.log('GAME NODE: ', gameNode);
   console.log('USING POLICY: ', gamePolicy);
   console.log('WITH PLAYER: ', player);
-  console.log('WITH BOARDSTATE: ', gameTree.boardState);
+  console.log('WITH BOARDSTATE: ', gameNode.boardState);
 
   /******* 
   // MONITOR. CONDITIONS FUNCTION: Tree needs to verify if a terminal   condition has been met.
@@ -26,9 +26,74 @@ const RunGameSimulation = (gameTree, gameNode, gamePolicy, level, player) => {
 
   //-----------------------------------------------------------------
 
-  selectNewNode(gameTree, gameNode, gamePolicy, level, player);
+  let [updatedGameTree, visitNode, selectedIndex] = selectNewNode(
+    gameTree,
+    gameNode,
+    gamePolicy,
+    level,
+    'X',
+    4,
+    1
+  );
 
-  return gameTree;
+  console.log('GAMETREE - AFTER SNN RUNS ', updatedGameTree);
+  console.log('VISITNODE - AFTER SNN RUNS ', visitNode);
+  console.log('SELECTEDINDEX - AFTER SNN RUNS ', selectedIndex);
+
+  gameTree = updatedGameTree.slice();
+  gameNode = visitNode;
+
+  [updatedGameTree, visitNode, selectedIndex] = selectNewNode(
+    gameTree,
+    gameNode,
+    gamePolicy,
+    level + 1,
+    'O',
+    4,
+    1
+  );
+
+  console.log('GAMETREE - AFTER SNN RUNS ', updatedGameTree);
+  console.log('VISITNODE - AFTER SNN RUNS ', visitNode);
+  console.log('SELECTEDINDEX - AFTER SNN RUNS ', selectedIndex);
+
+  gameTree = updatedGameTree.slice();
+  gameNode = visitNode;
+
+  [updatedGameTree, visitNode, selectedIndex] = selectNewNode(
+    gameTree,
+    gameNode,
+    gamePolicy,
+    level + 1,
+    'X',
+    4,
+    1
+  );
+
+  console.log('GAMETREE - AFTER SNN RUNS ', updatedGameTree);
+  console.log('VISITNODE - AFTER SNN RUNS ', visitNode);
+  console.log('SELECTEDINDEX - AFTER SNN RUNS ', selectedIndex);
+
+  gameTree = updatedGameTree.slice();
+  gameNode = visitNode;
+
+  [updatedGameTree, visitNode, selectedIndex] = selectNewNode(
+    gameTree,
+    gameNode,
+    gamePolicy,
+    level + 1,
+    'O',
+    4,
+    1
+  );
+
+  console.log('GAMETREE - AFTER SNN RUNS ', updatedGameTree);
+  console.log('VISITNODE - AFTER SNN RUNS ', visitNode);
+  console.log('SELECTEDINDEX - AFTER SNN RUNS ', selectedIndex);
+
+  console.log('VISITNODE HISTORY ', updatedGameTree[0].gameHistory);
+
+  return [updatedGameTree, visitNode.boardState];
 };
 
 /******* 

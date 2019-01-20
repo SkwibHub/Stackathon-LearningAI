@@ -23,6 +23,7 @@ export class GameNode {
     this.currentIndex = currentIndex;
     this.winRate = 0;
     this.visitCount = 0;
+    this.gameHistory = [];
     this.boardState = boardState;
   }
 }
@@ -58,11 +59,28 @@ const StartGameSimulation = (
     gameTreeInstance = [gameStart];
 
     console.log('INITIALIZED GAME TREE: ', gameTreeInstance);
+  } else {
+    gameTreeInstance[0].boardState = [
+      1000,
+      '_',
+      '_',
+      '_',
+      '_',
+      '_',
+      '_',
+      '_',
+      '_',
+      '_'
+    ];
+
+    // WHY IS BOARDSTATE NOT RESETTING?
+
+    console.log('NEXT RUN OF GAME TREE GAME TREE: ', gameTreeInstance[0]);
   }
 
   gameTreeInstance[0].visitCount++;
 
-  const gameTreeLastInstance = RunGameSimulation(
+  const [gameTreeLastInstance, boardState] = RunGameSimulation(
     gameTreeInstance,
     gameTreeInstance[0],
     gamePolicy,
@@ -72,7 +90,7 @@ const StartGameSimulation = (
 
   console.log('RETURNING THE POST-RUN INSTANCE: ', gameTreeLastInstance);
 
-  return gameTreeLastInstance;
+  return [gameTreeLastInstance, boardState];
 };
 
 export default StartGameSimulation;
