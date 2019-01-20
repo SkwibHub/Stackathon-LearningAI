@@ -31,27 +31,42 @@ const selectNewNode = (
 
   // find if open positions have nodes
 
-  const availablePositionsAlreadyVisited = availablePositions.filter(
-    position => {
-      if (gameNode.children.includes(position)) return true;
-      return false;
-    }
-  );
+  const availablePositionsAlreadyVisited = availablePositions.map(position => {
+    if (gameNode.children.includes(position)) return position;
+    return -1;
+  });
 
   console.log('GAMENODE CHILDREN ', gameNode.children);
   console.log('FILTERED POSITIONS ', availablePositionsAlreadyVisited);
 
   const availablePositionsByIndex = [];
+  const availablePositionsByData = [];
+  const availablePositionsByVisit = [];
 
-  for (let i = 0; i < gameNode.children.length; i++) {
-    if (availablePositionsAlreadyVisited.includes(gameNode.children[i])) {
-      availablePositionsByIndex.push(gameNode.childrenIndex[i]);
+  for (let i = 0; i < availablePositionsAlreadyVisited.length; i++) {
+    let j = 0;
+    if (availablePositionsAlreadyVisited[i] === gameNode.children[j]) {
+      availablePositionsByIndex.push(gameNode.childrenIndex[j]);
+      availablePositionsByData.push(
+        gameTree[gameNode.childrenIndex[j]].winRate /
+          gameTree[gameNode.childrenIndex[j]].visitCount
+      );
+      availablePositionsByVisit.push(
+        gameTree[gameNode.childrenIndex[j]].visitCount
+      );
+      j++;
+    } else {
+      availablePositionsByIndex.push(-1);
+      availablePositionsByData.push(300);
+      availablePositionsByVisit.push(300);
     }
   }
 
   console.log('VISITED CHILDREN: ', gameNode.children);
   console.log('VISITED CHILDREN INDEX: ', gameNode.childrenIndex);
   console.log('FILTERED POSITIONS BY INDEX ', availablePositionsByIndex);
+  console.log('FILTERED POSITIONS BY DATA ', availablePositionsByData);
+  console.log('FILTERED POSITIONS BY VISIT ', availablePositionsByVisit);
 
   //--------------------------------------------------------------
 
