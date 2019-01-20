@@ -1,54 +1,22 @@
 // import React, { Component } from 'react';
-import gameEvaluation from './gameEvaluation.js';
+import checkTerminalCondition from './checkTerminalCondition';
 
-// Structure of a game node.
-class gameNode {
-  constructor(parent, children, boardState, player, level = 0) {
-    this.parent = parent;
-    this.children = children;
-    this.player = player;
-    this.level = level + 1;
-    this.winRate = 0;
-    this.visitCount = 0;
-    this.boardState = boardState;
-  }
-}
+const RunGameSimulation = (gameTree, gamePolicy, player) => {
+  console.log('NOW RUNNING: ', gameTree);
+  console.log('USING POLICY: ', gamePolicy);
+  console.log('WITH PLAYER: ', player);
+  console.log('WITH BOARDSTATE: ', gameTree.boardState);
 
-const runGameSimulation = (
-  gameTreeInstance,
-  runNumber,
-  playerStarting,
-  gamePolicy
-) => {
-  console.log('Starting Game Tree', gameTreeInstance);
-  console.log('Starting Game Tree Run Number', runNumber);
-  console.log('Starting Player', playerStarting);
-  console.log('Starting Game Policy', gamePolicy);
-
-  // Initialize the head node of a new game tree if one does not exist or was not passed into the simulation. The head node has a base state of empty squares.
-  if (gameTreeInstance.length < 1) {
-    const initialChildren = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
-    const boardState = ['_', '_', '_', '_', '_', '_', '_', '_', '_'];
-    const gameStart = new gameNode(null, initialChildren, boardState, null, -1);
-
-    gameTreeInstance = [gameStart];
-
-    console.log('INITIALIZED GAME TREE: ', gameTreeInstance);
-  } else {
-    gameTreeInstance = [gameTreeInstance];
-    console.log('2nd RUN ', gameTreeInstance);
+  /******* 
+  // MONITOR. CONDITIONS FUNCTION: Tree needs to verify if a terminal   condition has been met.
+  *******/
+  const winCondition = checkTerminalCondition(gameTree.boardState, player);
+  if (winCondition !== 1000) {
+    return [winCondition, gameTree];
   }
 
-  gameTreeInstance.unshift(gameEvaluation(gameTreeInstance));
-
-  console.log('RETURNING THE INSTANCE: ', gameTreeInstance);
-
-  return gameTreeInstance;
+  return [winCondition, gameTree];
 };
-
-/******* 
-// MONITOR. CONDITIONS FUNCTION: Tree needs to verify if a terminal condition has been met.
-*******/
 
 /******* 
 // 1. SELECTION FUNCTION: Node needs to decide which child to select.
@@ -63,7 +31,7 @@ const runGameSimulation = (
 *******/
 
 /******* 
-// 4. SELECTION FUNCTION: Node needs to backpropagate values from child to parent.
+// 4. BACKPROPAGATE FUNCTION: Node needs to backpropagate values from child to parent.
 *******/
 
-export default runGameSimulation;
+export default RunGameSimulation;

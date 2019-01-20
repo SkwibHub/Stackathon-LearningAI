@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import RenderBoard from './RenderBoard';
-import runGameSimulation from './RunGameSimulation';
+import StartGameSimulation from './StartGameSimulation';
 
 class GameProcess extends Component {
   constructor() {
@@ -49,7 +49,7 @@ class GameProcess extends Component {
     event.preventDefault();
     console.log('Run submitted: ', this.state.currentRun);
 
-    const [latestEvaluation, newGameTree] = runGameSimulation(
+    const [latestEvaluation, newGameTree] = StartGameSimulation(
       this.state.gameTree,
       this.state.currentRun,
       this.state.startingPlayer,
@@ -66,9 +66,11 @@ class GameProcess extends Component {
 
     this.setState({
       currentRun: this.state.currentRun + 1,
-      gameTree: [newGameTree],
+      gameTree: newGameTree,
       evaluationHistory: newEvaluationHistory
     });
+
+    console.log('LATEST GAME TREE NOW ON STATE ', this.state.gameTree);
 
     // Run through another pass of a game simulation
   }
