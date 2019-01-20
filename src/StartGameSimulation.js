@@ -2,12 +2,25 @@
 import RunGameSimulation from './RunGameSimulation';
 
 // Structure of a game node.
-class gameNode {
-  constructor(parent, children, boardState, player, level = 0) {
+export class GameNode {
+  constructor(
+    parent,
+    parentIndex,
+    children,
+    childrenIndex,
+    currentIndex,
+    boardState,
+    player,
+    level
+  ) {
     this.parent = parent;
     this.children = children;
+    this.parentIndex = parentIndex;
+    this.childrenIndex = childrenIndex;
     this.player = player;
     this.level = level + 1;
+    this.position = 0;
+    this.currentIndex = currentIndex;
     this.winRate = 0;
     this.visitCount = 0;
     this.boardState = boardState;
@@ -26,22 +39,34 @@ const StartGameSimulation = (
   console.log('Starting Game Policy', gamePolicy);
 
   // Initialize the head node of a new game tree if one does not exist or was not passed into the simulation. The head node has a base state of empty squares.
-  if (gameTreeInstance.length < 1) {
-    const initialChildren = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
-    const boardState = ['_', '_', '_', '_', '_', '_', '_', '_', '_'];
-    const gameStart = new gameNode(null, initialChildren, boardState, null, -1);
+
+  if (!gameTreeInstance[0]) {
+    const initialChildren = [];
+    const initialChildrenIndex = [];
+    const boardState = [1000, '_', '_', '_', '_', '_', '_', '_', '_', '_'];
+    const gameStart = new GameNode(
+      null,
+      0,
+      initialChildren,
+      initialChildrenIndex,
+      0,
+      boardState,
+      null,
+      -1
+    );
 
     gameTreeInstance = [gameStart];
 
     console.log('INITIALIZED GAME TREE: ', gameTreeInstance);
-  } else {
-    gameTreeInstance = [gameTreeInstance];
-    console.log('2nd RUN ', gameTreeInstance[0]);
   }
 
+  gameTreeInstance[0].visitCount++;
+
   const gameTreeLastInstance = RunGameSimulation(
+    gameTreeInstance,
     gameTreeInstance[0],
     gamePolicy,
+    0,
     playerStarting
   );
 

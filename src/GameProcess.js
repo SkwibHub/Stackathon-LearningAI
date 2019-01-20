@@ -12,7 +12,7 @@ class GameProcess extends Component {
       currentRun: 0,
       gamePolicy: 0,
       startingPlayer: 'X', // This needs to switch with 'O' at times. Set as a constant here for now.
-      boardState: [],
+      boardState: ['?', '_', '_', '_', '_', '_', '_', '_', '_', '_'],
       evaluationHistory: []
     };
 
@@ -49,28 +49,27 @@ class GameProcess extends Component {
     event.preventDefault();
     console.log('Run submitted: ', this.state.currentRun);
 
-    const [latestEvaluation, newGameTree] = StartGameSimulation(
+    const newGameTree = StartGameSimulation(
       this.state.gameTree,
       this.state.currentRun,
       this.state.startingPlayer,
       this.state.gamePolicy
     );
 
-    console.log('LATEST EVALUATION: ', latestEvaluation);
-    console.log('EVALUATION HISTORY ', this.state.evaluationHistory);
+    // console.log('LATEST EVALUATION: ', newGameTree);
+    // console.log('EVALUATION HISTORY ', this.state.evaluationHistory);
     console.log('LATEST GAME TREE ', newGameTree);
 
-    const newEvaluationHistory = this.state.evaluationHistory.concat(
-      latestEvaluation
-    );
+    // const newEvaluationHistory = this.state.evaluationHistory.concat(
+    //  latestEvaluation
+    // );
 
     this.setState({
       currentRun: this.state.currentRun + 1,
       gameTree: newGameTree,
-      evaluationHistory: newEvaluationHistory
+      boardState: newGameTree[0].boardState
+      // evaluationHistory: newEvaluationHistory
     });
-
-    console.log('LATEST GAME TREE NOW ON STATE ', this.state.gameTree);
 
     // Run through another pass of a game simulation
   }
@@ -86,7 +85,8 @@ class GameProcess extends Component {
   }
 
   render() {
-    console.log('GameProcess State: ', this.state);
+    console.log('RENDER GameProcess State: ', this.state);
+    console.log('LATEST GAME TREE NOW ON STATE ', this.state.gameTree);
     console.log('Loading: ', this.state.loading);
 
     return (
@@ -97,7 +97,7 @@ class GameProcess extends Component {
         <div>
           <RenderBoard
             boardState={{
-              boardState: ['?', '-', 'X', '-', '-', '-', '-', '-', '-', '-']
+              boardState: this.state.boardState
             }}
           />
         </div>
