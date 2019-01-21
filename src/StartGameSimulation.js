@@ -57,8 +57,6 @@ const StartGameSimulation = (
     );
 
     gameTreeInstance = [gameStart];
-
-    console.log('INITIALIZED GAME TREE: ', gameTreeInstance);
   } else {
     gameTreeInstance[0].boardState = [
       1000,
@@ -72,10 +70,6 @@ const StartGameSimulation = (
       '_',
       '_'
     ];
-
-    // WHY IS BOARDSTATE NOT RESETTING?
-
-    console.log('NEXT RUN OF GAME TREE GAME TREE: ', gameTreeInstance[0]);
   }
 
   gameTreeInstance[0].visitCount++;

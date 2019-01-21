@@ -23,14 +23,14 @@ const checkTerminalCondition = (boardState, player) => {
   if (player === 'X') statusCode = 1;
   if (player === 'O') statusCode = -1;
 
-  if (A === B && B === C && A === player) boardState[0] = statusCode;
-  if (D === E && E === F && D === player) boardState[0] = statusCode;
-  if (G === H && H === I && G === player) boardState[0] = statusCode;
-  if (A === D && D === G && A === player) boardState[0] = statusCode;
-  if (B === E && E === H && B === player) boardState[0] = statusCode;
-  if (C === F && F === I && C === player) boardState[0] = statusCode;
-  if (A === E && E === I && A === player) boardState[0] = statusCode;
-  if (C === E && E === G && C === player) boardState[0] = statusCode;
+  if (A === B && B === C && A === player) return (boardState[0] = statusCode);
+  if (D === E && E === F && D === player) return (boardState[0] = statusCode);
+  if (G === H && H === I && G === player) return (boardState[0] = statusCode);
+  if (A === D && D === G && A === player) return (boardState[0] = statusCode);
+  if (B === E && E === H && B === player) return (boardState[0] = statusCode);
+  if (C === F && F === I && C === player) return (boardState[0] = statusCode);
+  if (A === E && E === I && A === player) return (boardState[0] = statusCode);
+  if (C === E && E === G && C === player) return (boardState[0] = statusCode);
 
   let isDraw = boardState.filter(BS => {
     if (BS === 'X') return false;
@@ -41,7 +41,7 @@ const checkTerminalCondition = (boardState, player) => {
 
   console.log('ISDRAW: ', isDraw);
 
-  if (isDraw.length < 1) boardState[0] = 0;
+  if (isDraw.length < 1) return (boardState[0] = 0);
 
   return boardState;
 

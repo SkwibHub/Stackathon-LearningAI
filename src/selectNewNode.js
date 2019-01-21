@@ -13,9 +13,6 @@ const selectNewNode = (
 
   gameNode.boardState = gameTree[0].boardState.slice();
 
-  console.log('BOARD ON NEXT MOVE ', gameTree[0].boardState.slice());
-  console.log('BOARD ON NEXT MOVE ', gameNode.boardState);
-
   let availablePositions = gameNode.boardState
     .slice()
     .map((position, index) => {
@@ -28,18 +25,12 @@ const selectNewNode = (
     return true;
   });
 
-  console.log('AVAILABLE POSITIONS ', availablePositions);
-
   // find if open positions have nodes
 
   const availablePositionsAlreadyVisited = availablePositions.map(position => {
     if (gameNode.children.includes(position)) return position;
     return 0;
   });
-
-  console.log('GAMENODE CHILDREN ', gameNode.children);
-  console.log('GAMENODE CHILDREN INDEX ', gameNode.children);
-  console.log('FILTERED POSITIONS ', availablePositionsAlreadyVisited);
 
   let availablePositionsByIndex = availablePositionsAlreadyVisited.slice();
   const availablePositionsByData = availablePositionsAlreadyVisited.slice();
@@ -56,24 +47,19 @@ const selectNewNode = (
       gameTree[gameNode.childrenIndex[i]].visitCount;
   }
 
-  console.log('VISITED CHILDREN: ', gameNode.children);
-  console.log('VISITED CHILDREN INDEX: ', gameNode.childrenIndex);
-  console.log('FILTERED POSITIONS BY INDEX ', availablePositionsByIndex);
-  console.log('FILTERED POSITIONS BY DATA ', availablePositionsByData);
-  console.log('FILTERED POSITIONS BY VISIT ', availablePositionsByVisit);
-
   //--------------------------------------------------------------
 
   // COMPARE NODES TO POLICY
 
   // -------------------------------------------------------------
 
-  // SELECT NODE ON POLICY -- CURRENTLY FAKE
   const [selectedPosition, selectedIndex] = calculateNodeFromPolicy(
     availablePositions,
     availablePositionsByIndex,
     availablePositionsByData,
-    availablePositionsByVisit
+    availablePositionsByVisit,
+    player,
+    gamePolicy
   );
 
   // -------------------------------------------------------------
@@ -108,7 +94,6 @@ const selectNewNode = (
 
     gameNode.children.push(selectedPosition);
     gameNode.childrenIndex.push(gameTree.length);
-    console.log('OLD TREE: ', gameTree);
     visitNode.boardState[selectedPosition] = player;
 
     visitNode.position = selectedPosition;
@@ -118,8 +103,6 @@ const selectNewNode = (
     gameTree.push(visitNode);
     const updatedGameTree = gameTree;
 
-    console.log('NEW NODE: ', visitNode);
-    console.log('NEW TREE: ', gameTree);
     return [updatedGameTree, visitNode, gameTree.length - 1];
   } else {
     const visitNode = gameTree[selectedIndex];
@@ -129,9 +112,6 @@ const selectNewNode = (
     gameTree[0].boardState = gameNode.boardState;
     const updatedGameTree = gameTree;
 
-    console.log('UPDATED NODE: ', visitNode.boardState.slice());
-    console.log('UPDATED NODE INDEX: ', selectedIndex);
-    console.log('UPDATED TREE: ', gameTree);
     return [updatedGameTree, visitNode, selectedIndex];
   }
 };

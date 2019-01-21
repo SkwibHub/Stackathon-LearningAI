@@ -56,14 +56,6 @@ class GameProcess extends Component {
       this.state.gamePolicy
     );
 
-    // console.log('LATEST EVALUATION: ', newGameTree);
-    // console.log('EVALUATION HISTORY ', this.state.evaluationHistory);
-    console.log('LATEST GAME TREE ', newGameTree);
-
-    // const newEvaluationHistory = this.state.evaluationHistory.concat(
-    //  latestEvaluation
-    // );
-
     this.setState({
       currentRun: this.state.currentRun + 1,
       gameTree: newGameTree,
@@ -85,10 +77,6 @@ class GameProcess extends Component {
   }
 
   render() {
-    console.log('RENDER GameProcess State: ', this.state);
-    console.log('LATEST GAME TREE NOW ON STATE ', this.state.gameTree);
-    console.log('Loading: ', this.state.loading);
-
     return (
       <div>
         <h1>
