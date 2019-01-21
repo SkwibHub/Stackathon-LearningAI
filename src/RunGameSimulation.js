@@ -31,8 +31,6 @@ const RunGameSimulation = (gameTree, gameNode, gamePolicy, level, player) => {
     player
   );
 
-  console.log('=============', gameTreeLastInstance[0].boardState[0]);
-
   visitNode.winRate = visitNode.winRate + gameTreeLastInstance[0].boardState[0];
 
   return [gameTreeLastInstance, boardState];

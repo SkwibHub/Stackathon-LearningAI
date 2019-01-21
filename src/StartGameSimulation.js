@@ -35,8 +35,6 @@ const StartGameSimulation = (
   gamePolicy
 ) => {
   console.log('Starting Game Tree', gameTreeInstance);
-  console.log('Starting Game Tree Run Number', runNumber);
-  console.log('Starting Player', playerStarting);
   console.log('Starting Game Policy', gamePolicy);
 
   // Initialize the head node of a new game tree if one does not exist or was not passed into the simulation. The head node has a base state of empty squares.
@@ -82,7 +80,7 @@ const StartGameSimulation = (
     playerStarting
   );
 
-  console.log('RETURNING THE POST-RUN INSTANCE: ', gameTreeLastInstance);
+  console.log('Endinging Game Tree', gameTreeLastInstance);
 
   return [gameTreeLastInstance, boardState];
 };

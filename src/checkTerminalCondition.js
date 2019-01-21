@@ -1,8 +1,6 @@
 // import React, { Component } from 'react';
 
 const checkTerminalCondition = (boardState, player) => {
-  console.log('CHECKING WIN CONDITION FOR BOARDSTATE: ', boardState);
-
   const A = boardState[1];
   const B = boardState[2];
   const C = boardState[3];
@@ -13,12 +11,6 @@ const checkTerminalCondition = (boardState, player) => {
   const H = boardState[8];
   const I = boardState[9];
   let statusCode = 0;
-
-  console.log('XXXXXXX PLAYER, ', player);
-  console.log('XXXXXXX A, ', A);
-  console.log('XXXXXXX B, ', B);
-  console.log('XXXXXXX C, ', C);
-  console.log(A === B && B === C && A === 'X');
 
   if (player === 'X') statusCode = 1;
   if (player === 'O') statusCode = -1;
@@ -38,8 +30,6 @@ const checkTerminalCondition = (boardState, player) => {
     if (BS === '_') return true;
     return false;
   });
-
-  console.log('ISDRAW: ', isDraw);
 
   if (isDraw.length < 1) return (boardState[0] = 0);
 

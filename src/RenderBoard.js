@@ -2,15 +2,12 @@ import React from 'react';
 
 const RenderBoard = props => {
   const { boardState } = props.boardState;
-  console.log(boardState);
   const topRow = [boardState[1], boardState[2], boardState[3]];
   const middleRow = [boardState[4], boardState[5], boardState[6]];
   const bottomRow = [boardState[7], boardState[8], boardState[9]];
-  console.log('Render Board: ', boardState);
 
   return (
     <div className="boardContainer">
-      <h1>TEST</h1>
       <div className="boardRow">
         {topRow.map((position, index) => (
           <div

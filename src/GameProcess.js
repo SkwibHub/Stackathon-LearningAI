@@ -9,7 +9,7 @@ class GameProcess extends Component {
       gameTree: [],
       loading: true,
       numberOfRuns: '',
-      currentRun: 0,
+      currentRun: 1,
       gamePolicy: 0,
       startingPlayer: 'X', // This needs to switch with 'O' at times. Set as a constant here for now.
       boardState: ['?', '_', '_', '_', '_', '_', '_', '_', '_', '_'],
@@ -58,6 +58,7 @@ class GameProcess extends Component {
 
     this.state.evaluationHistory.push(newGameTree[0].boardState[0]);
     console.log('EVALUATION: ', this.state.evaluationHistory);
+    console.log('____________________________________');
 
     this.setState({
       currentRun: this.state.currentRun + 1,
@@ -82,7 +83,7 @@ class GameProcess extends Component {
     return (
       <div>
         <h1>
-          GAME NUMBER: {this.state.currentRun} OF {this.state.numberOfRuns}
+          GAME NUMBER: {this.state.currentRun - 1} OF {this.state.numberOfRuns}
         </h1>
         <div>
           <RenderBoard
@@ -90,6 +91,10 @@ class GameProcess extends Component {
               boardState: this.state.boardState
             }}
           />
+          <div>
+            <p>EVALUATION:</p>
+            <p>{this.state.evaluationHistory}</p>
+          </div>
         </div>
         <div>
           <label>NUMBER OF RUNS:</label>
