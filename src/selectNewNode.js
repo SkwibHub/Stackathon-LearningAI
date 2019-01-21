@@ -1,4 +1,5 @@
 import { GameNode } from './StartGameSimulation';
+import calculateNodeFromPolicy from './calculateNodeFromPolicy';
 
 const selectNewNode = (
   gameTree,
@@ -33,33 +34,26 @@ const selectNewNode = (
 
   const availablePositionsAlreadyVisited = availablePositions.map(position => {
     if (gameNode.children.includes(position)) return position;
-    return -1;
+    return 0;
   });
 
   console.log('GAMENODE CHILDREN ', gameNode.children);
+  console.log('GAMENODE CHILDREN INDEX ', gameNode.children);
   console.log('FILTERED POSITIONS ', availablePositionsAlreadyVisited);
 
-  const availablePositionsByIndex = [];
-  const availablePositionsByData = [];
-  const availablePositionsByVisit = [];
+  let availablePositionsByIndex = availablePositionsAlreadyVisited.slice();
+  const availablePositionsByData = availablePositionsAlreadyVisited.slice();
+  const availablePositionsByVisit = availablePositionsAlreadyVisited.slice();
 
-  for (let i = 0; i < availablePositionsAlreadyVisited.length; i++) {
-    let j = 0;
-    if (availablePositionsAlreadyVisited[i] === gameNode.children[j]) {
-      availablePositionsByIndex.push(gameNode.childrenIndex[j]);
-      availablePositionsByData.push(
-        gameTree[gameNode.childrenIndex[j]].winRate /
-          gameTree[gameNode.childrenIndex[j]].visitCount
-      );
-      availablePositionsByVisit.push(
-        gameTree[gameNode.childrenIndex[j]].visitCount
-      );
-      j++;
-    } else {
-      availablePositionsByIndex.push(-1);
-      availablePositionsByData.push(300);
-      availablePositionsByVisit.push(300);
-    }
+  for (let i = 0; i < gameNode.children.length; i++) {
+    let indexValue = availablePositionsAlreadyVisited.indexOf(
+      gameNode.children[i]
+    );
+    availablePositionsByIndex[indexValue] = gameNode.childrenIndex[i];
+    availablePositionsByData[indexValue] =
+      gameTree[gameNode.childrenIndex[i]].winRate;
+    availablePositionsByVisit[indexValue] =
+      gameTree[gameNode.childrenIndex[i]].visitCount;
   }
 
   console.log('VISITED CHILDREN: ', gameNode.children);
@@ -75,19 +69,21 @@ const selectNewNode = (
   // -------------------------------------------------------------
 
   // SELECT NODE ON POLICY -- CURRENTLY FAKE
-  const selectedPosition = availablePositions[0];
+  const [selectedPosition, selectedIndex] = calculateNodeFromPolicy(
+    availablePositions,
+    availablePositionsByIndex,
+    availablePositionsByData,
+    availablePositionsByVisit
+  );
 
   // -------------------------------------------------------------
 
   // THIS SEEMS TO BE WORKING
 
   let needNewNode = true;
-  let selectedIndex = -1;
 
   if (availablePositionsAlreadyVisited.includes(selectedPosition)) {
     needNewNode = false;
-    selectedIndex = availablePositionsAlreadyVisited.indexOf(selectedPosition);
-    selectedIndex = availablePositionsByIndex[selectedIndex];
   }
 
   if (gameTree.length < 2) needNewNode = true;
