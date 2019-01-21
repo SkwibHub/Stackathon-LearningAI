@@ -43,7 +43,7 @@ const calculateNodeFromPolicy = (
     return [positions[minDataRandom], byIndex[minDataRandom]];
   }
 
-  if (player === 'O') {
+  if (player === 'X') {
     const minData = Math.min(...winDataByVisits);
     const minDataIndices = filterIndices(winDataByVisits, minData);
     const minDataRandom = selectValueAtRandom(minDataIndices);
