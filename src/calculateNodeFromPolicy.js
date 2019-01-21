@@ -22,12 +22,19 @@ const calculateNodeFromPolicy = (
   player,
   policy = 0
 ) => {
+  // const winDataByVisits = winData;
+
+  const winDataByVisits = [];
+  for (let i = 0; i < winData.length; i++) {
+    winDataByVisits.push(winData[i] / (visits[i] + 1));
+  }
+
   console.log('-- FILTERED POSITIONS BY POSITIONS ', positions);
   console.log('-- FILTERED POSITIONS BY INDEX ', byIndex);
-  console.log('-- FILTERED POSITIONS BY DATA ', winData);
+  console.log('-- FILTERED POSITIONS BY DATA ', winDataByVisits);
   console.log('-- FILTERED POSITIONS BY VISIT ', visits);
-  console.log('-- MAX OF DATA: ', Math.max(...winData));
-  console.log('-- MIN OF DATA: ', Math.min(...winData));
+  console.log('-- MAX OF DATA: ', Math.max(...winDataByVisits));
+  console.log('-- MIN OF DATA: ', Math.min(...winDataByVisits));
 
   if (policy === 0) {
     const minData = Math.min(...visits);
@@ -37,14 +44,14 @@ const calculateNodeFromPolicy = (
   }
 
   if (player === 'O') {
-    const minData = Math.min(...winData);
-    const minDataIndices = filterIndices(winData, minData);
+    const minData = Math.min(...winDataByVisits);
+    const minDataIndices = filterIndices(winDataByVisits, minData);
     const minDataRandom = selectValueAtRandom(minDataIndices);
     return [positions[minDataRandom], byIndex[minDataRandom]];
   }
 
-  const maxData = Math.max(...winData);
-  const maxDataIndices = filterIndices(winData, maxData);
+  const maxData = Math.max(...winDataByVisits);
+  const maxDataIndices = filterIndices(winDataByVisits, maxData);
   const maxDataRandom = selectValueAtRandom(maxDataIndices);
 
   console.log('--MAX VALUE WITH INDEX, ', maxDataIndices);

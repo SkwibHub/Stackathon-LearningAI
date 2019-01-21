@@ -56,11 +56,13 @@ class GameProcess extends Component {
       this.state.gamePolicy
     );
 
+    this.state.evaluationHistory.push(newGameTree[0].boardState[0]);
+    console.log('EVALUATION: ', this.state.evaluationHistory);
+
     this.setState({
       currentRun: this.state.currentRun + 1,
       gameTree: newGameTree,
       boardState: newGameTree[0].boardState
-      // evaluationHistory: newEvaluationHistory
     });
 
     // Run through another pass of a game simulation

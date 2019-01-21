@@ -13,6 +13,8 @@ const RunGameSimulation = (gameTree, gameNode, gamePolicy, level, player) => {
 
   gameNode.boardState = checkTerminalCondition(gameNode.boardState, player);
 
+  visitNode.winRate++;
+
   if (gameNode.boardState[0] !== 1000) {
     return [gameTree, gameNode.boardState];
   }
