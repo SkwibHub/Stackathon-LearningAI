@@ -13,8 +13,6 @@ const RunGameSimulation = (gameTree, gameNode, gamePolicy, level, player) => {
 
   gameNode.boardState = checkTerminalCondition(gameNode.boardState, player);
 
-  visitNode.winRate++;
-
   if (gameNode.boardState[0] !== 1000) {
     return [gameTree, gameNode.boardState];
   }
@@ -32,6 +30,10 @@ const RunGameSimulation = (gameTree, gameNode, gamePolicy, level, player) => {
     level + 1,
     player
   );
+
+  console.log('=============', gameTreeLastInstance[0].boardState[0]);
+
+  visitNode.winRate = visitNode.winRate + gameTreeLastInstance[0].boardState[0];
 
   return [gameTreeLastInstance, boardState];
 };
