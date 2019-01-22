@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import RenderBoard from './RenderBoard';
 import StartGameSimulation from './StartGameSimulation';
+import ChartComponent from './ChartComponent';
+import { Line } from 'react-chartjs-2';
 
 class GameProcess extends Component {
   constructor() {
@@ -20,21 +22,20 @@ class GameProcess extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleNewRun = this.handleNewRun.bind(this);
     this.handleAllRuns = this.handleAllRuns.bind(this);
+    this.runMethod = this.runMethod.bind(this);
   }
   ComponentDidMount() {
-    // 1. Timeout Delay
-    // 2. Create new board state function
     this.setState({
-      boardState: ['?', '_', 'X', '_', '_', '_', '_', '_', '_', '_'],
       loading: false
     });
-    // 3. Repeat if limit not hit
   }
 
   handleChange(event) {
     this.setState({
-      [event.target.name]: event.target.value
+      [event.target.name]: parseInt(event.target.value)
     });
+    console.log('Number submitted: ', this.state.numberOfRuns);
+    console.log('Policy submitted: ', this.state.gamePolicy);
   }
 
   handleSubmit(event) {
@@ -45,10 +46,7 @@ class GameProcess extends Component {
     });
   }
 
-  handleNewRun(event) {
-    event.preventDefault();
-    console.log('Run submitted: ', this.state.currentRun);
-
+  runMethod() {
     const [newGameTree, boardState] = StartGameSimulation(
       this.state.gameTree,
       this.state.currentRun,
@@ -57,73 +55,95 @@ class GameProcess extends Component {
     );
 
     this.state.evaluationHistory.push(newGameTree[0].boardState[0]);
-    console.log('EVALUATION: ', this.state.evaluationHistory);
-    console.log('____________________________________');
+
+    this.state.currentRun++;
+    this.state.gameTree = newGameTree;
+    this.state.boardState = newGameTree[0].boardState;
 
     this.setState({
-      currentRun: this.state.currentRun + 1,
-      gameTree: newGameTree,
-      boardState: newGameTree[0].boardState
+      currentRun: this.state.currentRun,
+      gameTree: this.state.gameTree,
+      boardState: this.state.boardState
     });
 
-    // Run through another pass of a game simulation
+    console.log('EVALUATION: ', this.state.evaluationHistory);
+    console.log('____________________________________');
+    return newGameTree;
+  }
+
+  handleNewRun(event) {
+    event.preventDefault();
+    console.log('Run submitted: ', this.state.currentRun);
+    console.log('Game Policy: ', this.state.gamePolicy);
+    this.runMethod();
   }
 
   handleAllRuns(event) {
     event.preventDefault();
-    console.log('All runs submitted!');
-    this.setState({
-      currentRun: this.state.currentRun + 1
-    });
+    console.log('All runs submitted!', this.state.numberOfRuns);
+    console.log('Game Policy: ', this.state.gamePolicy);
 
-    // Run through ALL passes of a game simulation
+    for (let i = 0; i < this.state.numberOfRuns; i++) {
+      this.runMethod();
+    }
   }
 
   render() {
+    const [data, options] = ChartComponent(this.state.evaluationHistory);
     return (
       <div>
-        <h1>
-          GAME NUMBER: {this.state.currentRun - 1} OF {this.state.numberOfRuns}
-        </h1>
+        <h1>GAME NUMBER: {this.state.currentRun - 1}</h1>
         <div>
           <RenderBoard
             boardState={{
               boardState: this.state.boardState
             }}
           />
-          <div>
-            <p>EVALUATION:</p>
-            <p>{this.state.evaluationHistory}</p>
-          </div>
         </div>
         <div>
-          <label>NUMBER OF RUNS:</label>
-          <input
-            name="numberOfRuns"
-            type="text"
-            onChange={this.handleChange}
-            value={this.state.numberOfRuns}
-          />
+          <Line data={data} options={options} height={100} width={500} />
         </div>
-        <button type="submit" onClick={this.handleSubmit}>
-          SUBMIT GAME RUN NUMBER
-        </button>
+        <div>
+          <div>
+            <label>NUMBER OF RUNS:</label>
+            <input
+              name="numberOfRuns"
+              type="text"
+              onChange={this.handleChange}
+              value={this.state.numberOfRuns}
+            />
+          </div>
+          <button type="submit" onClick={this.handleSubmit}>
+            SUBMIT GAME RUN NUMBER
+          </button>
 
-        <button
-          type="submit"
-          onClick={this.handleNewRun}
-          value={this.state.currentRun}
-        >
-          ANOTHER GAME RUN
-        </button>
-        <button
-          type="submit"
-          onClick={this.handleAllRunsy}
-          value={this.state.currentRun}
-        >
-          ALL GAME RUNS
-        </button>
-        <button>MORE BUTTONS</button>
+          <button
+            type="submit"
+            onClick={this.handleNewRun}
+            value={this.state.currentRun}
+          >
+            SINGLE GAME RUN
+          </button>
+          <button
+            type="submit"
+            onClick={this.handleAllRuns}
+            value={this.state.numberOfRuns}
+          >
+            ALL GAME RUNS
+          </button>
+        </div>
+        <div>
+          <label>POLICY:</label>
+          <select
+            name="gamePolicy"
+            type="number"
+            onChange={this.handleChange}
+            value={this.state.gamePolicy}
+          >
+            <option value="1">COMPETE</option>
+            <option value="0">EXPLORE</option>
+          </select>
+        </div>
       </div>
     );
   }
