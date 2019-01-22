@@ -34,8 +34,6 @@ class GameProcess extends Component {
     this.setState({
       [event.target.name]: parseInt(event.target.value)
     });
-    console.log('Number submitted: ', this.state.numberOfRuns);
-    console.log('Policy submitted: ', this.state.gamePolicy);
   }
 
   handleSubmit(event) {
@@ -74,14 +72,12 @@ class GameProcess extends Component {
   handleNewRun(event) {
     event.preventDefault();
     console.log('Run submitted: ', this.state.currentRun);
-    console.log('Game Policy: ', this.state.gamePolicy);
     this.runMethod();
   }
 
   handleAllRuns(event) {
     event.preventDefault();
     console.log('All runs submitted!', this.state.numberOfRuns);
-    console.log('Game Policy: ', this.state.gamePolicy);
 
     for (let i = 0; i < this.state.numberOfRuns; i++) {
       this.runMethod();
@@ -92,7 +88,7 @@ class GameProcess extends Component {
     const [data, options] = ChartComponent(this.state.evaluationHistory);
     return (
       <div>
-        <h1>GAME NUMBER: {this.state.currentRun - 1}</h1>
+        <h2>GAME NUMBER: {this.state.currentRun - 1}</h2>
         <div>
           <RenderBoard
             boardState={{
@@ -105,7 +101,7 @@ class GameProcess extends Component {
         </div>
         <div>
           <div>
-            <label>NUMBER OF RUNS:</label>
+            <label>NUMBER OF RUNS TO DO AT ONCE: </label>
             <input
               name="numberOfRuns"
               type="text"
@@ -113,10 +109,16 @@ class GameProcess extends Component {
               value={this.state.numberOfRuns}
             />
           </div>
-          <button type="submit" onClick={this.handleSubmit}>
-            SUBMIT GAME RUN NUMBER
-          </button>
-
+          <label> POLICY: </label>
+          <select
+            name="gamePolicy"
+            type="number"
+            onChange={this.handleChange}
+            value={this.state.gamePolicy}
+          >
+            <option value="1">COMPETE</option>
+            <option value="0">EXPLORE</option>
+          </select>
           <button
             type="submit"
             onClick={this.handleNewRun}
@@ -129,21 +131,10 @@ class GameProcess extends Component {
             onClick={this.handleAllRuns}
             value={this.state.numberOfRuns}
           >
-            ALL GAME RUNS
+            ACTIVATE GAME RUN BATCH
           </button>
         </div>
-        <div>
-          <label>POLICY:</label>
-          <select
-            name="gamePolicy"
-            type="number"
-            onChange={this.handleChange}
-            value={this.state.gamePolicy}
-          >
-            <option value="1">COMPETE</option>
-            <option value="0">EXPLORE</option>
-          </select>
-        </div>
+        <div />
       </div>
     );
   }
